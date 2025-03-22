@@ -21,7 +21,7 @@ export const PlanetDetails = () => {
     }
 
     return (
-        <Card className="h-full">
+        <Card className="h-[500px]">
             <CardHeader className="relative">
                 <CardTitle>{selectedObject.name}</CardTitle>
                 {loading && (

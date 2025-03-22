@@ -22,18 +22,15 @@ const CameraController = () => {
 
     useFrame(({ scene }) => {
         if (selectedObject?.model && controlsRef.current) {
-            // Find the actual planet mesh in the scene
             const planetMesh = scene.getObjectByName(selectedObject.id);
             if (!planetMesh) return;
 
-            // Get world position of the planet
             const worldPos = new THREE.Vector3();
             planetMesh.getWorldPosition(worldPos);
 
             const distance = selectedObject.model.scale * 15;
 
             if (isTransitioning.current) {
-                // Smoothly move camera and update controls
                 camera.position.lerp(
                     new THREE.Vector3(
                         worldPos.x,
@@ -44,7 +41,6 @@ const CameraController = () => {
                 );
                 controlsRef.current.target.lerp(worldPos, 0.05);
 
-                // Check if we're close enough to end transition
                 if (camera.position.distanceTo(new THREE.Vector3(
                     worldPos.x,
                     worldPos.y + 2,
@@ -53,7 +49,6 @@ const CameraController = () => {
                     isTransitioning.current = false;
                 }
             } else {
-                // Keep the controls target updated with planet position
                 controlsRef.current.target.copy(worldPos);
             }
 
