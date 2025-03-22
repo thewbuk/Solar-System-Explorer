@@ -2,12 +2,11 @@ import axios from "axios";
 
 export const fetchNASAImages = async (query: string, count: number = 5) => {
   try {
-    // Encode the query properly for URL
     const encodedQuery = encodeURIComponent(query);
 
     const response = await axios.get(
       `https://images-api.nasa.gov/search?q=${encodedQuery}&media_type=image`,
-      { timeout: 10000 } // Add timeout to prevent hanging requests
+      { timeout: 10000 }
     );
 
     if (
@@ -34,12 +33,11 @@ export const fetchNASAImages = async (query: string, count: number = 5) => {
 
 export const fetchWikipediaInfo = async (query: string) => {
   try {
-    // Encode the query properly for URL
     const encodedQuery = encodeURIComponent(query);
 
     const searchResponse = await axios.get(
       `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodedQuery}&format=json&origin=*`,
-      { timeout: 8000 } // Add timeout to prevent hanging requests
+      { timeout: 8000 }
     );
 
     if (
@@ -70,7 +68,6 @@ export const fetchWikipediaInfo = async (query: string) => {
       }
     }
 
-    // Return fallback information if nothing found
     return {
       title: query,
       extract: "No Wikipedia information available for this celestial object.",
@@ -78,7 +75,6 @@ export const fetchWikipediaInfo = async (query: string) => {
     };
   } catch (error) {
     console.error("Error fetching Wikipedia info:", error);
-    // Return fallback information on error
     return {
       title: query,
       extract: "Could not retrieve Wikipedia information at this time.",

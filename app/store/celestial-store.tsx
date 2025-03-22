@@ -24,19 +24,15 @@ export const CelestialProvider = ({ children }: { children: ReactNode }) => {
     const [wikipediaInfo, setWikipediaInfo] = useState<any>(null);
     const [isInitialLoad, setIsInitialLoad] = useState(true);
 
-    // Function to fetch data for a selected object
     const fetchObjectData = async (object: PlanetData) => {
         if (!object) return;
 
         setLoading(true);
 
         try {
-            // Use Promise.all for parallel requests
             const [imagesData, wikiData] = await Promise.all([
-                // Fetch NASA images
                 fetchNASAImages(object.name),
 
-                // Fetch Wikipedia info with appropriate query
                 fetchWikipediaInfo(
                     object.id === 'sun' ? 'Sun (star)' : `${object.name} planet`
                 )
@@ -46,7 +42,6 @@ export const CelestialProvider = ({ children }: { children: ReactNode }) => {
             setWikipediaInfo(wikiData);
         } catch (error) {
             console.error("Error fetching data:", error);
-            // Set default values in case of error
             setNasaImages([]);
             setWikipediaInfo({
                 title: object.name,
@@ -60,11 +55,8 @@ export const CelestialProvider = ({ children }: { children: ReactNode }) => {
 
     const selectObject = (id: string) => {
         const object = celestialObjects.find(obj => obj.id === id) || null;
-
-        // First update the selected object to trigger camera movements
         setSelectedObject(object);
 
-        // Then fetch data
         if (object) {
             fetchObjectData(object);
         }
@@ -74,7 +66,6 @@ export const CelestialProvider = ({ children }: { children: ReactNode }) => {
         return selectedObject?.id === id;
     };
 
-    // Initialize with the Sun selected, but only once
     useEffect(() => {
         if (isInitialLoad) {
             const sunObject = celestialObjects.find(obj => obj.id === 'sun') || null;

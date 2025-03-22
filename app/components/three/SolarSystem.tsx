@@ -6,60 +6,82 @@ import { Planet } from './Planet';
 import { useCelestial } from '@/app/store/celestial-store';
 import { useRef, useState, useEffect } from 'react';
 import * as THREE from 'three';
+import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 
 const CameraController = () => {
     const { camera } = useThree();
     const { selectedObject } = useCelestial();
-    const targetRef = useRef(new THREE.Vector3());
-    const [transitionActive, setTransitionActive] = useState(false);
+    const controlsRef = useRef<OrbitControlsImpl>(null);
+    const isTransitioning = useRef(false);
 
     useEffect(() => {
-        if (selectedObject && selectedObject.model) {
-            // Set target position for smooth camera movement
-            targetRef.current.set(
-                selectedObject.model.position[0],
-                selectedObject.model.position[1],
-                selectedObject.model.position[2]
-            );
-            setTransitionActive(true);
+        if (selectedObject?.model) {
+            isTransitioning.current = true;
         }
     }, [selectedObject]);
 
-    useFrame(() => {
-        if (transitionActive && selectedObject?.model) {
-            // Calculate appropriate camera distance based on object scale
-            const distance = selectedObject.model.scale * 10;
+    useFrame(({ scene }) => {
+        if (selectedObject?.model && controlsRef.current) {
+            // Find the actual planet mesh in the scene
+            const planetMesh = scene.getObjectByName(selectedObject.id);
+            if (!planetMesh) return;
 
-            // Move camera position with smooth interpolation
-            const cameraTarget = new THREE.Vector3(
-                targetRef.current.x,
-                targetRef.current.y + 2,
-                targetRef.current.z + distance
-            );
+            // Get world position of the planet
+            const worldPos = new THREE.Vector3();
+            planetMesh.getWorldPosition(worldPos);
 
-            // Use slower lerp for smoother transitions
-            camera.position.lerp(cameraTarget, 0.01);
+            const distance = selectedObject.model.scale * 15;
 
-            // Look at the selected object
-            camera.lookAt(targetRef.current);
+            if (isTransitioning.current) {
+                // Smoothly move camera and update controls
+                camera.position.lerp(
+                    new THREE.Vector3(
+                        worldPos.x,
+                        worldPos.y + 2,
+                        worldPos.z + distance
+                    ),
+                    0.05
+                );
+                controlsRef.current.target.lerp(worldPos, 0.05);
 
-            // Stop transition when close enough
-            if (camera.position.distanceTo(cameraTarget) < 0.5) {
-                setTransitionActive(false);
+                // Check if we're close enough to end transition
+                if (camera.position.distanceTo(new THREE.Vector3(
+                    worldPos.x,
+                    worldPos.y + 2,
+                    worldPos.z + distance
+                )) < 0.1) {
+                    isTransitioning.current = false;
+                }
+            } else {
+                // Keep the controls target updated with planet position
+                controlsRef.current.target.copy(worldPos);
             }
+
+            controlsRef.current.update();
         }
     });
 
-    return null;
+    return (
+        <OrbitControls
+            ref={controlsRef}
+            makeDefault
+            enableZoom={true}
+            enablePan={true}
+            minDistance={5}
+            maxDistance={200}
+            minPolarAngle={0}
+            maxPolarAngle={Math.PI / 1.5}
+            dampingFactor={0.2}
+            enableDamping
+        />
+    );
 };
 
-// Sun light effect with dynamic flares
 const SunLight = () => {
     const lightRef = useRef<THREE.PointLight>(null);
 
     useFrame(({ clock }) => {
         if (lightRef.current) {
-            // Subtle light intensity oscillation for sun
             const time = clock.getElapsedTime();
             lightRef.current.intensity = 1.8 + Math.sin(time * 0.5) * 0.2;
         }
@@ -80,13 +102,12 @@ const SunLight = () => {
     );
 };
 
-// Orbital paths with NO animated markers
 const OrbitalPath = ({ position, radius }: { position: [number, number, number], radius: number }) => {
     const ringRef = useRef<THREE.Mesh>(null);
 
     return (
         <group position={position}>
-            {/* Orbit ring */}
+            { }
             <mesh
                 ref={ringRef}
                 rotation={[Math.PI / 2, 0, 0]}
@@ -105,7 +126,6 @@ export const SolarSystem = () => {
 
     return (
         <div className="h-[600px] w-full relative bg-black rounded-lg overflow-hidden">
-            {/* Controls for camera position */}
             <div className="absolute top-4 right-4 z-10 flex gap-2">
                 <button
                     onClick={() => {
@@ -143,18 +163,7 @@ export const SolarSystem = () => {
                 <SunLight />
                 <Stars radius={100} depth={50} count={5000} factor={4} saturation={0.5} fade speed={1} />
                 <CameraController />
-                <OrbitControls
-                    enableZoom={true}
-                    enablePan={true}
-                    minDistance={5}
-                    maxDistance={200}
-                    minPolarAngle={0}
-                    maxPolarAngle={Math.PI / 1.5}
-                    dampingFactor={0.2}
-                    enableDamping
-                />
 
-                {/* Planets */}
                 {celestialObjects.map((planet) => (
                     <Planet
                         key={planet.id}
@@ -163,8 +172,6 @@ export const SolarSystem = () => {
                         onClick={() => selectObject(planet.id)}
                     />
                 ))}
-
-                {/* Orbital paths - without markers */}
                 {celestialObjects
                     .filter(obj => obj.id !== 'sun' && obj.model?.position)
                     .map((planet) => (

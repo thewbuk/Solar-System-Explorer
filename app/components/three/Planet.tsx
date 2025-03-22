@@ -18,34 +18,26 @@ export const Planet = ({ planet, isSelected, onClick }: PlanetProps) => {
     const ringRef = useRef<Mesh>(null);
     const [hovered, setHovered] = useState(false);
     const [tooltipVisible, setTooltipVisible] = useState(false);
-    // Store initial rotation to prevent random jumping
     const initialRotation = useRef(Math.random() * Math.PI * 2);
 
-    // Set cursor based on hover state
     useCursor(hovered);
 
-    // Auto-rotation with different speeds for each planet
     useFrame((state, delta) => {
         if (meshRef.current) {
-            // Different rotation speed based on real rotation periods
             const rotationSpeed = 0.1 / (planet.rotationPeriod / 24);
             meshRef.current.rotation.y += delta * rotationSpeed;
         }
 
         if (ringRef.current && planet.id === 'saturn') {
-            // Rotate rings at a slightly different speed
             ringRef.current.rotation.z += delta * 0.02;
         }
 
-        // Group rotation for orbit simulation - fixed speed
         if (groupRef.current && planet.id !== 'sun') {
-            // Orbital speed inversely proportional to orbital period, but don't change position on hover
             const orbitalSpeed = 0.005 / (planet.orbitalPeriod / 365);
             groupRef.current.rotation.y = initialRotation.current + (state.clock.elapsedTime * orbitalSpeed);
         }
     });
 
-    // Show tooltip after short delay when hovering
     useEffect(() => {
         let timeout: NodeJS.Timeout;
         if (hovered) {
@@ -56,7 +48,6 @@ export const Planet = ({ planet, isSelected, onClick }: PlanetProps) => {
         return () => clearTimeout(timeout);
     }, [hovered]);
 
-    // Use texture when available (fallback to color)
     let texture;
     try {
         texture = useTexture(planet.texture);
@@ -64,14 +55,13 @@ export const Planet = ({ planet, isSelected, onClick }: PlanetProps) => {
         texture = null;
     }
 
-    // Calculate position from model data
     const position = planet.model?.position || [0, 0, 0];
 
-    // For sun, render directly without orbit group
     if (planet.id === 'sun') {
         return (
             <mesh
                 ref={meshRef}
+                name={planet.id}
                 position={position}
                 scale={planet.model?.scale || 1}
                 onClick={(e) => {
@@ -103,6 +93,7 @@ export const Planet = ({ planet, isSelected, onClick }: PlanetProps) => {
         <group ref={groupRef} rotation={[0, initialRotation.current, 0]}>
             <mesh
                 ref={meshRef}
+                name={planet.id}
                 position={position}
                 scale={planet.model?.scale || 1}
                 onClick={(e) => {
@@ -116,8 +107,10 @@ export const Planet = ({ planet, isSelected, onClick }: PlanetProps) => {
                 <meshStandardMaterial
                     color={planet.color}
                     map={texture}
-                    emissive={isSelected || hovered ? "#ffffff" : undefined}
-                    emissiveIntensity={isSelected ? 0.3 : hovered ? 0.1 : 0}
+                    emissive={isSelected || hovered ? planet.color : undefined}
+                    emissiveIntensity={isSelected ? 0.8 : hovered ? 0.3 : 0}
+                    metalness={isSelected ? 0.5 : 0.2}
+                    roughness={isSelected ? 0.3 : 0.8}
                 />
 
                 {tooltipVisible && !isSelected && (
@@ -129,7 +122,7 @@ export const Planet = ({ planet, isSelected, onClick }: PlanetProps) => {
                 )}
             </mesh>
 
-            {/* Saturn's rings */}
+            { }
             {planet.id === 'saturn' && (
                 <mesh
                     ref={ringRef}
