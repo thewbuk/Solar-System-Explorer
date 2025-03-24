@@ -12,7 +12,6 @@ An interactive web application that allows users to explore the solar system in 
 
 ## Technologies Used
 
-- Next.js
 - React
 - Three.js with React Three Fiber
 - shadcn/ui components
@@ -62,7 +61,7 @@ An interactive web application that allows users to explore the solar system in 
 
 ## Project Structure
 
-- `/app` - Next.js application
+- `/app` - main app
   - `/components` - React components
     - `/three` - Three.js related components
     - `/ui` - UI components
