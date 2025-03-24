@@ -17,10 +17,8 @@ export const PlanetList = () => {
                     {celestialObjects.map((object) => (
                         <div
                             key={object.id}
-                            className={`p-2 rounded-md cursor-pointer flex items-center justify-between transition-colors ${isSelected(object.id)
-                                ? 'bg-primary/10 border border-primary/30'
-                                : 'hover:bg-secondary'
-                                }`}
+                            className={`p-2 rounded-md cursor-pointer flex items-center justify-between transition-colors 
+                                ${isSelected(object.id) ? 'bg-primary/10 border border-primary/30' : 'hover:bg-secondary'}`}
                             onClick={() => selectObject(object.id)}
                         >
                             <div className="flex items-center gap-2">
@@ -30,7 +28,6 @@ export const PlanetList = () => {
                                 />
                                 <span>{object.name}</span>
                             </div>
-
                             {isSelected(object.id) && (
                                 <Badge variant="outline" className="bg-primary text-primary-foreground">
                                     Selected
