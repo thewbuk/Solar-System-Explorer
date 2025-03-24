@@ -87,12 +87,12 @@ const SunLight = () => {
             <pointLight
                 ref={lightRef}
                 position={[0, 0, 0]}
-                intensity={2}
+                intensity={3}
                 color="#FDB813"
-                distance={100}
-                decay={1.5}
+                distance={200}
+                decay={1}
             />
-            <ambientLight intensity={0.2} />
+            <ambientLight intensity={0.4} />
         </>
     );
 };

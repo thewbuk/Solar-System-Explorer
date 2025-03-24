@@ -54,10 +54,10 @@ export const Planet = ({ planet, isSelected, onClick }: PlanetProps) => {
             <meshStandardMaterial
                 color={planet.color}
                 map={texture}
-                emissive={planet.id === 'sun' ? planet.color : (isSelected || showTooltip ? planet.color : undefined)}
-                emissiveIntensity={planet.id === 'sun' ? 0.5 : (isSelected ? 0.8 : showTooltip ? 0.3 : 0)}
-                metalness={isSelected ? 0.5 : 0.2}
-                roughness={isSelected ? 0.3 : 0.8}
+                emissive={planet.id === 'sun' ? planet.color : (isSelected || showTooltip ? planet.color : planet.color)}
+                emissiveIntensity={planet.id === 'sun' ? 0.5 : (isSelected ? 0.8 : showTooltip ? 0.3 : 0.1)}
+                metalness={isSelected ? 0.5 : 0.3}
+                roughness={isSelected ? 0.3 : 0.6}
             />
             {showTooltip && !isSelected && (
                 <Html distanceFactor={15}>
