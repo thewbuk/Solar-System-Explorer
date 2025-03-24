@@ -61,7 +61,7 @@ An interactive web application that allows users to explore the solar system in 
 
 ## Project Structure
 
-- `/app` - main app
+- `/app` - Main app
   - `/components` - React components
     - `/three` - Three.js related components
     - `/ui` - UI components
