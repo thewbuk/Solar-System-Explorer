@@ -30,16 +30,32 @@ An interactive web application that allows users to explore the solar system in 
    cd Solar-System-Explorer
    ```
 
-2. Install dependencies:
+2. Install dependencies using either pnpm or bun:
+
+   Using pnpm:
 
    ```
    pnpm install
    ```
 
+   Using bun:
+
+   ```
+   bun install
+   ```
+
 3. Run the development server:
+
+   Using pnpm:
 
    ```
    pnpm dev
+   ```
+
+   Using bun:
+
+   ```
+   bun dev
    ```
 
 4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
