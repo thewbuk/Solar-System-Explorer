@@ -26,7 +26,7 @@ An interactive web application that allows users to explore the solar system in 
 1. Clone the repository:
 
    ```
-   git clone <repository-url>
+   git clone https://github.com/thewbuk/Solar-System-Explorer
    cd Solar-System-Explorer
    ```
 
