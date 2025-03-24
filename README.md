@@ -18,6 +18,7 @@ An interactive web application that allows users to explore the solar system in 
 - shadcn/ui components
 - TypeScript
 - Tailwind CSS
+- Zustand for state management
 - Axios for API requests
 
 ## How to Run

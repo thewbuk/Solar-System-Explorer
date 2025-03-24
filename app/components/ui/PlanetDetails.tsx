@@ -91,7 +91,6 @@ export const PlanetDetails = () => {
                                         <div key={index} className="space-y-2">
                                             <div className="relative aspect-video rounded-md overflow-hidden">
                                                 {image.url && (
-                                                    // Use unoptimized to prevent issues with remote images
                                                     <Image
                                                         src={image.url}
                                                         alt={image.title}
