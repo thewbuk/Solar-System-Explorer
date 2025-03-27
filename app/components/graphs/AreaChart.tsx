@@ -123,18 +123,18 @@ export function AreaChart() {
     }, [selectedObject, timeRange]);
 
     return (
-        <Card>
-            <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
-                <div className="grid flex-1 gap-1 text-center sm:text-left">
-                    <CardTitle>Wikipedia Activity</CardTitle>
-                    <CardDescription>
-                        {selectedObject ? `${selectedObject.name} Wikipedia page activity` : "Select a celestial object to view Wikipedia activity"}
+        <Card className="h-full overflow-hidden">
+            <CardHeader className="flex items-center gap-2 space-y-0 border-b py-2 sm:flex-row">
+                <div className="grid flex-1 gap-0 text-center sm:text-left">
+                    <CardTitle className="text-sm sm:text-base">Wikipedia Activity</CardTitle>
+                    <CardDescription className="text-xs">
+                        {selectedObject ? `${selectedObject.name} Wikipedia page activity` : "Select a celestial object"}
                     </CardDescription>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-1">
                     <Select value={statType} onValueChange={(value) => setStatType(value as WikiStat)}>
                         <SelectTrigger
-                            className="w-[120px] rounded-lg"
+                            className="w-[100px] h-7 rounded-lg text-xs"
                             aria-label="Select statistic"
                         >
                             <SelectValue placeholder="Page Views" />
@@ -151,7 +151,7 @@ export function AreaChart() {
 
                     <Select value={timeRange} onValueChange={(value) => setTimeRange(value as TimeRange)}>
                         <SelectTrigger
-                            className="w-[100px] rounded-lg sm:ml-auto"
+                            className="w-[80px] h-7 rounded-lg text-xs"
                             aria-label="Select time range"
                         >
                             <SelectValue placeholder="30 days" />
@@ -170,29 +170,29 @@ export function AreaChart() {
                     </Select>
                 </div>
             </CardHeader>
-            <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
+            <CardContent className="px-2 pt-2 sm:px-4 sm:pt-2">
                 {loading ? (
-                    <div className="h-[250px] w-full flex items-center justify-center">
-                        <div className="space-y-4 w-full">
-                            <Skeleton className="h-4 w-full" />
-                            <Skeleton className="h-[200px] w-full" />
-                            <Skeleton className="h-4 w-2/3 mx-auto" />
+                    <div className="h-[220px] w-full flex items-center justify-center">
+                        <div className="space-y-3 w-full">
+                            <Skeleton className="h-3 w-full" />
+                            <Skeleton className="h-[180px] w-full" />
+                            <Skeleton className="h-3 w-2/3 mx-auto" />
                         </div>
                     </div>
                 ) : !selectedObject ? (
-                    <div className="h-[250px] w-full flex items-center justify-center">
-                        <p className="text-muted-foreground">Select a planet to view Wikipedia activity</p>
+                    <div className="h-[220px] w-full flex items-center justify-center">
+                        <p className="text-muted-foreground text-xs">Select a planet to view Wikipedia activity</p>
                     </div>
                 ) : wikiStats.length === 0 ? (
-                    <div className="h-[250px] w-full flex items-center justify-center">
-                        <p className="text-muted-foreground">No Wikipedia data available for {selectedObject.name}</p>
+                    <div className="h-[220px] w-full flex items-center justify-center">
+                        <p className="text-muted-foreground text-xs">No Wikipedia data available for {selectedObject.name}</p>
                     </div>
                 ) : (
                     <ChartContainer
                         config={chartConfig}
-                        className="aspect-auto h-[250px] w-full"
+                        className="h-[220px] max-h-[220px] w-full"
                     >
-                        <RechartsAreaChart data={wikiStats}>
+                        <RechartsAreaChart data={wikiStats} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
                             <defs>
                                 <linearGradient id="fillViews" x1="0" y1="0" x2="0" y2="1">
                                     <stop
@@ -226,6 +226,7 @@ export function AreaChart() {
                                 axisLine={false}
                                 tickMargin={8}
                                 minTickGap={32}
+                                tick={{ fontSize: 10 }}
                                 tickFormatter={(value) => {
                                     const date = new Date(value);
                                     return date.toLocaleDateString("en-US", {
@@ -255,7 +256,7 @@ export function AreaChart() {
                                     type="monotone"
                                     fill="url(#fillViews)"
                                     stroke="var(--color-chart-1)"
-                                    activeDot={{ r: 6, strokeWidth: 2, stroke: "var(--background)" }}
+                                    activeDot={{ r: 5, strokeWidth: 1, stroke: "var(--background)" }}
                                 />
                             ) : (
                                 <Area
@@ -263,7 +264,7 @@ export function AreaChart() {
                                     type="monotone"
                                     fill="url(#fillEdits)"
                                     stroke="var(--color-chart-2)"
-                                    activeDot={{ r: 6, strokeWidth: 2, stroke: "var(--background)" }}
+                                    activeDot={{ r: 5, strokeWidth: 1, stroke: "var(--background)" }}
                                 />
                             )}
                             <ChartLegend content={<ChartLegendContent />} />

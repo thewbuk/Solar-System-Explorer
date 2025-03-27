@@ -165,8 +165,8 @@ export function PlanetDataChart() {
     }, [selectedObject, wikiData])
 
     return (
-        <Card>
-            <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
+        <Card className="h-full">
+            <CardHeader className="flex items-center gap-2 space-y-0 border-b py-4 sm:flex-row">
                 <div className="grid flex-1 gap-1 text-center sm:text-left">
                     <CardTitle>Solar System - Planetary Data</CardTitle>
                     <CardDescription>
@@ -196,10 +196,10 @@ export function PlanetDataChart() {
                     </SelectContent>
                 </Select>
             </CardHeader>
-            <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
+            <CardContent className="px-2 pt-4 sm:px-6 sm:pt-4 overflow-hidden">
                 <ChartContainer
                     config={chartConfig}
-                    className="aspect-auto h-[350px] w-full"
+                    className="h-[220px] max-h-[220px] w-full"
                 >
                     <AreaChart data={highlightedData}>
                         <defs>
@@ -270,18 +270,18 @@ export function PlanetDataChart() {
                 </ChartContainer>
 
                 {selectedObject && (
-                    <div className="mt-6 border-t pt-4">
-                        <h3 className="text-lg font-medium mb-2">{selectedObject.name} - Wikipedia Info</h3>
+                    <div className="mt-2 border-t pt-2 max-h-[60px] overflow-y-auto">
+                        <h3 className="text-xs font-medium mb-1">{selectedObject.name} - Wikipedia Info</h3>
                         {loading ? (
-                            <div className="space-y-2">
-                                <Skeleton className="h-4 w-full" />
-                                <Skeleton className="h-4 w-full" />
-                                <Skeleton className="h-4 w-3/4" />
+                            <div className="space-y-1">
+                                <Skeleton className="h-2 w-full" />
+                                <Skeleton className="h-2 w-full" />
+                                <Skeleton className="h-2 w-3/4" />
                             </div>
                         ) : selectedWikiExtract ? (
-                            <p className="text-sm text-muted-foreground">{selectedWikiExtract}</p>
+                            <p className="text-xs text-muted-foreground line-clamp-3">{selectedWikiExtract}</p>
                         ) : (
-                            <p className="text-sm text-muted-foreground">No Wikipedia information available.</p>
+                            <p className="text-xs text-muted-foreground">No Wikipedia information available.</p>
                         )}
                     </div>
                 )}
