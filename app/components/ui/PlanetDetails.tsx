@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui
 import { Separator } from "../../../components/ui/separator";
 import Image from 'next/image';
 import { ScrollArea } from "../../../components/ui/scroll-area";
+import { Skeleton } from "../../../components/ui/skeleton";
 
 export const PlanetDetails = () => {
     const { selectedObject, loading, nasaImages, wikipediaInfo } = useCelestial();
@@ -79,11 +80,14 @@ export const PlanetDetails = () => {
                     <TabsContent value="images" className="p-4">
                         <ScrollArea className="h-[350px] pr-4">
                             {loading ? (
-                                <div className="flex items-center justify-center h-full">
-                                    <div className="text-center space-y-2">
-                                        <div className="h-8 w-8 rounded-full bg-primary/20 animate-pulse mx-auto"></div>
-                                        <p>Loading NASA images...</p>
-                                    </div>
+                                <div className="grid grid-cols-1 gap-6">
+                                    {[1, 2, 3].map((item) => (
+                                        <div key={item} className="space-y-2">
+                                            <Skeleton className="relative aspect-video w-full h-[150px]" />
+                                            <Skeleton className="h-4 w-3/4" />
+                                            <Skeleton className="h-3 w-1/2" />
+                                        </div>
+                                    ))}
                                 </div>
                             ) : nasaImages.length > 0 ? (
                                 <div className="grid grid-cols-1 gap-6">
@@ -114,11 +118,13 @@ export const PlanetDetails = () => {
                     <TabsContent value="wiki" className="p-4">
                         <ScrollArea className="h-[350px] pr-4">
                             {loading ? (
-                                <div className="flex items-center justify-center h-full">
-                                    <div className="text-center space-y-2">
-                                        <div className="h-8 w-8 rounded-full bg-primary/20 animate-pulse mx-auto"></div>
-                                        <p>Loading Wikipedia information...</p>
-                                    </div>
+                                <div className="space-y-4">
+                                    <Skeleton className="h-6 w-2/3" />
+                                    <Skeleton className="h-4 w-full" />
+                                    <Skeleton className="h-4 w-full" />
+                                    <Skeleton className="h-4 w-full" />
+                                    <Skeleton className="h-4 w-3/4" />
+                                    <Skeleton className="h-4 w-1/2" />
                                 </div>
                             ) : wikipediaInfo ? (
                                 <div className="space-y-4">
