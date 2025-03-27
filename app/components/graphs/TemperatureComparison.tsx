@@ -27,19 +27,16 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Separator } from "@/components/ui/separator"
 
-// Temperature data for planets
 interface PlanetTemperature {
     name: string;
     min: number;
     max: number;
     avg: number;
-    avgC: number; // Average in Celsius
-    avgF: number; // Average in Fahrenheit
+    avgC: number;
+    avgF: number;
     color: string;
 }
 
-// These are real temperature data points for the planets
-// Source: NASA Planetary Fact Sheets
 const planetTemperatures: PlanetTemperature[] = [
     {
         name: "Mercury",
@@ -141,14 +138,11 @@ export function TemperatureComparison() {
     const [viewType, setViewType] = React.useState<TempViewType>("comparison");
     const [tempUnit, setTempUnit] = React.useState<TempUnit>("C");
 
-    // Get reference temperature value for comparison
     const getComparisonData = () => {
-        // Convert temperatures based on selected unit
         const unitField = tempUnit === "C" ? "avgC" : "avgF";
         const unitSymbol = tempUnit === "C" ? "°C" : "°F";
 
         return planetTemperatures.map(planet => {
-            // Add a custom label with the value for display
             return {
                 ...planet,
                 name: planet.name,
@@ -159,9 +153,7 @@ export function TemperatureComparison() {
         });
     };
 
-    // Get min/max temperature range
     const getRangeData = () => {
-        // Use the right field depending on unit selection
         const minField = tempUnit === "C" ? "min" : (temp: PlanetTemperature) => (temp.min * 9 / 5) + 32;
         const maxField = tempUnit === "C" ? "max" : (temp: PlanetTemperature) => (temp.max * 9 / 5) + 32;
         const unitSymbol = tempUnit === "C" ? "°C" : "°F";

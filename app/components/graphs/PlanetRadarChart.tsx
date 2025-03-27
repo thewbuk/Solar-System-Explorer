@@ -40,36 +40,34 @@ export function PlanetRadarChart() {
 
     React.useEffect(() => {
         if (selectedObject) {
-            // Normalize planet attributes on a scale of 0-100
             const normalizeAttribute = (value: number, max: number): number => {
                 return Math.min(100, Math.round((value / max) * 100));
             };
 
-            // Calculate normalized attributes
             const newRadarData: NormalizedPlanetData[] = [
                 {
                     attribute: "Size",
-                    value: normalizeAttribute(selectedObject.diameter, 150000), // Jupiter is ~143,000km
+                    value: normalizeAttribute(selectedObject.diameter, 150000),
                     fullMark: 100
                 },
                 {
                     attribute: "Distance",
-                    value: 100 - normalizeAttribute(selectedObject.distanceFromSun, 4500), // Neptune is ~4,500 million km
+                    value: 100 - normalizeAttribute(selectedObject.distanceFromSun, 4500),
                     fullMark: 100
                 },
                 {
                     attribute: "Orbit Period",
-                    value: 100 - normalizeAttribute(selectedObject.orbitalPeriod, 60000), // Neptune is ~60,000 days
+                    value: 100 - normalizeAttribute(selectedObject.orbitalPeriod, 60000),
                     fullMark: 100
                 },
                 {
                     attribute: "Rotation",
-                    value: normalizeAttribute(24, Math.abs(selectedObject.rotationPeriod)), // Earth is 24 hours
+                    value: normalizeAttribute(24, Math.abs(selectedObject.rotationPeriod)),
                     fullMark: 100
                 },
                 {
                     attribute: "Moons",
-                    value: normalizeAttribute(selectedObject.moons, 82), // Saturn has ~82 moons
+                    value: normalizeAttribute(selectedObject.moons, 82),
                     fullMark: 100
                 }
             ];

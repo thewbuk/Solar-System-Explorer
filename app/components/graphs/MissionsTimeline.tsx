@@ -20,7 +20,6 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 import { Badge } from "@/components/ui/badge"
 
-// Space mission data by planet and decade
 interface MissionData {
     decade: string;
     Mercury: number;
@@ -33,14 +32,12 @@ interface MissionData {
     Neptune: number;
 }
 
-// This is real historical data about planetary missions by decade
-// Source: NASA, ESA, and other space agency documentation
 const spaceAgencyMissions: MissionData[] = [
     {
         decade: "1950s",
         Mercury: 0,
         Venus: 0,
-        Earth: 1, // Early Earth satellites
+        Earth: 1,
         Mars: 0,
         Jupiter: 0,
         Saturn: 0,
@@ -50,9 +47,9 @@ const spaceAgencyMissions: MissionData[] = [
     {
         decade: "1960s",
         Mercury: 0,
-        Venus: 7, // Venera missions, Mariner 2
-        Earth: 10, // Various Earth observation missions
-        Mars: 7, // Early Mars missions, Mariner 4
+        Venus: 7,
+        Earth: 10,
+        Mars: 7,
         Jupiter: 0,
         Saturn: 0,
         Uranus: 0,
@@ -60,69 +57,69 @@ const spaceAgencyMissions: MissionData[] = [
     },
     {
         decade: "1970s",
-        Mercury: 1, // Mariner 10
-        Venus: 10, // Venera missions
-        Earth: 15, // Multiple Earth observation satellites
-        Mars: 4, // Viking missions, Mariner 9
-        Jupiter: 2, // Pioneer 10 & 11, Voyager 1 & 2
-        Saturn: 1, // Pioneer 11, Voyager 1
+        Mercury: 1,
+        Venus: 10,
+        Earth: 15,
+        Mars: 4,
+        Jupiter: 2,
+        Saturn: 1,
         Uranus: 0,
         Neptune: 0
     },
     {
         decade: "1980s",
         Mercury: 0,
-        Venus: 4, // Venera, Vega missions
-        Earth: 20, // Various Earth observation satellites
-        Mars: 1, // Viking, Phobos missions
-        Jupiter: 1, // Galileo
-        Saturn: 1, // Voyager 2
-        Uranus: 1, // Voyager 2
-        Neptune: 1 // Voyager 2
+        Venus: 4,
+        Earth: 20,
+        Mars: 1,
+        Jupiter: 1,
+        Saturn: 1,
+        Uranus: 1,
+        Neptune: 1
     },
     {
         decade: "1990s",
         Mercury: 0,
-        Venus: 1, // Magellan, Galileo flyby
-        Earth: 25, // Major growth in Earth satellites
-        Mars: 8, // Mars Global Surveyor, Pathfinder, etc.
-        Jupiter: 2, // Galileo, Cassini flyby
+        Venus: 1,
+        Earth: 25,
+        Mars: 8,
+        Jupiter: 2,
         Saturn: 0,
         Uranus: 0,
         Neptune: 0
     },
     {
         decade: "2000s",
-        Mercury: 1, // MESSENGER
-        Venus: 3, // Venus Express, MESSENGER flyby
-        Earth: 35, // Explosion in Earth observation satellites
-        Mars: 11, // Mars Odyssey, Spirit, Opportunity, etc.
-        Jupiter: 2, // New Horizons flyby, Cassini
-        Saturn: 1, // Cassini
+        Mercury: 1,
+        Venus: 3,
+        Earth: 35,
+        Mars: 11,
+        Jupiter: 2,
+        Saturn: 1,
         Uranus: 0,
         Neptune: 0
     },
     {
         decade: "2010s",
-        Mercury: 1, // MESSENGER's continued mission, BepiColombo launch
-        Venus: 1, // Akatsuki
-        Earth: 50, // Commercial satellite growth
-        Mars: 6, // Curiosity, MAVEN, InSight, etc.
-        Jupiter: 2, // Juno, JUICE preparation
-        Saturn: 1, // Cassini grand finale
+        Mercury: 1,
+        Venus: 1,
+        Earth: 50,
+        Mars: 6,
+        Jupiter: 2,
+        Saturn: 1,
         Uranus: 0,
         Neptune: 0
     },
     {
         decade: "2020s",
-        Mercury: 1, // BepiColombo arrival
-        Venus: 3, // Parker Solar Probe flybys, new mission announcements
-        Earth: 65, // Continued satellite deployments, including mega-constellations
-        Mars: 5, // Perseverance, Hope, Tianwen-1, etc.
-        Jupiter: 2, // JUICE, Europa Clipper
-        Saturn: 0, // Upcoming Dragonfly to Titan
-        Uranus: 0, // Proposed missions in planning
-        Neptune: 0 // Proposed missions in development
+        Mercury: 1,
+        Venus: 3,
+        Earth: 65,
+        Mars: 5,
+        Jupiter: 2,
+        Saturn: 0,
+        Uranus: 0,
+        Neptune: 0
     }
 ];
 
@@ -168,17 +165,14 @@ export function MissionsTimeline() {
     const { selectedObject } = useCelestial();
     const [highlightedPlanets, setHighlightedPlanets] = React.useState<string[]>([]);
 
-    // When a planet is selected, highlight it in the chart
     React.useEffect(() => {
         if (selectedObject && selectedObject.name !== "Sun") {
             setHighlightedPlanets([selectedObject.name]);
         } else {
-            // By default show Earth and Mars as they have the most missions
             setHighlightedPlanets(["Earth", "Mars"]);
         }
     }, [selectedObject]);
 
-    // Handle planet selection
     const togglePlanet = (planet: string) => {
         setHighlightedPlanets(prev =>
             prev.includes(planet)
@@ -187,7 +181,6 @@ export function MissionsTimeline() {
         );
     };
 
-    // Get total mission count for selected planet
     const getTotalMissions = (planet: string): number => {
         return spaceAgencyMissions.reduce((total, decade) => {
             return total + (decade[planet as keyof MissionData] as number);
