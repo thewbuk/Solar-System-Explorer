@@ -29,6 +29,7 @@ export const useCelestial = create<CelestialStore>((set, get) => ({
 
         try {
             const [imagesData, wikiData] = await Promise.all([
+                // implement polling for images
                 fetchNASAImages(object.name),
                 fetchWikipediaInfo(object.id === 'sun' ? 'Sun (star)' : `${object.name} planet`)
             ]);
@@ -39,6 +40,7 @@ export const useCelestial = create<CelestialStore>((set, get) => ({
                 loading: false
             });
         } catch (error) {
+            // for debuging for now needs to be removed later
             console.error("Error fetching data:", error);
             set({
                 nasaImages: [],

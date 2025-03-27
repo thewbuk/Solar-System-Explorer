@@ -22,15 +22,19 @@ const CameraController = () => {
 
     useFrame(({ scene }) => {
         if (selectedObject?.model && controlsRef.current) {
+            // planet id
             const planetMesh = scene.getObjectByName(selectedObject.id);
             if (!planetMesh) return;
 
+            // positin of the planet
             const worldPos = new THREE.Vector3();
             planetMesh.getWorldPosition(worldPos);
 
+            // calculate camera distance based on planet size (using 15 for now, but can be adjusted)
             const distance = selectedObject.model.scale * 15;
 
             if (isTransitioning.current) {
+                // smooth transition. ofsets can be adjusted 
                 camera.position.lerp(
                     new THREE.Vector3(
                         worldPos.x,
@@ -41,6 +45,7 @@ const CameraController = () => {
                 );
                 controlsRef.current.target.lerp(worldPos, 0.05);
 
+                // if (targer position == current position)
                 if (camera.position.distanceTo(new THREE.Vector3(
                     worldPos.x,
                     worldPos.y + 2,
@@ -49,6 +54,7 @@ const CameraController = () => {
                     isTransitioning.current = false;
                 }
             } else {
+                // center camera on planet
                 controlsRef.current.target.copy(worldPos);
             }
 
@@ -77,6 +83,7 @@ const SunLight = () => {
 
     useFrame(({ clock }) => {
         if (lightRef.current) {
+            // light from sun
             const time = clock.getElapsedTime();
             lightRef.current.intensity = 1.8 + Math.sin(time * 0.5) * 0.2;
         }

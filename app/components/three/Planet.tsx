@@ -17,18 +17,22 @@ export const Planet = ({ planet, isSelected, onClick }: PlanetProps) => {
     const meshRef = useRef<Mesh>(null);
     const ringRef = useRef<Mesh>(null);
     const [showTooltip, setShowTooltip] = useState(false);
+    // random initial rotation
     const initialRotation = useRef(Math.random() * Math.PI * 2);
 
     useFrame((state, delta) => {
         if (meshRef.current) {
+            // rotate aroundaxis based on set period
             meshRef.current.rotation.y += delta * (0.1 / (planet.rotationPeriod / 24));
         }
 
         if (ringRef.current && planet.id === 'saturn') {
+            // stupid saturn rings. it's not correct
             ringRef.current.rotation.z += delta * 0.02;
         }
 
         if (groupRef.current && planet.id !== 'sun') {
+            // sppeed based on set period
             groupRef.current.rotation.y = initialRotation.current +
                 (state.clock.elapsedTime * 0.005 / (planet.orbitalPeriod / 365));
         }
@@ -54,6 +58,7 @@ export const Planet = ({ planet, isSelected, onClick }: PlanetProps) => {
             <meshStandardMaterial
                 color={planet.color}
                 map={texture}
+                // sun glow
                 emissive={planet.id === 'sun' ? planet.color : (isSelected || showTooltip ? planet.color : planet.color)}
                 emissiveIntensity={planet.id === 'sun' ? 0.5 : (isSelected ? 0.8 : showTooltip ? 0.3 : 0.1)}
                 metalness={isSelected ? 0.5 : 0.3}
@@ -69,6 +74,7 @@ export const Planet = ({ planet, isSelected, onClick }: PlanetProps) => {
         </mesh>
     );
 
+    // sun should not orbit. who knew 
     if (planet.id === 'sun') return planetMesh;
 
     return (
@@ -79,6 +85,7 @@ export const Planet = ({ planet, isSelected, onClick }: PlanetProps) => {
                     ref={ringRef}
                     position={position}
                     scale={planet.model?.scale || 1}
+                    // i don't know why this is needed. stupid saturn rings
                     rotation={[Math.PI / 3, 0, 0]}
                 >
                     <ringGeometry args={[1.2, 2, 64]} />
@@ -92,4 +99,4 @@ export const Planet = ({ planet, isSelected, onClick }: PlanetProps) => {
             )}
         </group>
     );
-}; 
+};

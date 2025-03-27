@@ -10,6 +10,7 @@ export const fetchNASAImages = async (query: string, count: number = 5) => {
     );
 
     if (
+      //simplify response
       response.data &&
       response.data.collection &&
       response.data.collection.items &&
@@ -41,6 +42,7 @@ export const fetchWikipediaInfo = async (query: string) => {
     );
 
     if (
+      //simplify response
       searchResponse.data &&
       searchResponse.data.query &&
       searchResponse.data.query.search &&
@@ -54,6 +56,7 @@ export const fetchWikipediaInfo = async (query: string) => {
       );
 
       if (
+        //simplify response
         extractResponse.data &&
         extractResponse.data.query &&
         extractResponse.data.query.pages &&
